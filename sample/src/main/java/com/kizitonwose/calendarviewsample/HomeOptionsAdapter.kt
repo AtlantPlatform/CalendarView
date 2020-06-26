@@ -20,6 +20,7 @@ class HomeOptionsAdapter(val onClick: (ExampleItem) -> Unit) :
         ExampleItem(R.string.example_2_title, R.string.example_2_subtitle) { Example2Fragment() },
         ExampleItem(R.string.example_3_title, R.string.example_3_subtitle) { Example3Fragment() },
         ExampleItem(R.string.example_4_title, R.string.example_4_subtitle) { Example4Fragment() },
+        ExampleItem(R.string.example_4_1_title, R.string.example_4_1_subtitle) { Example4_1_Fragment() },
         ExampleItem(R.string.example_5_title, R.string.example_5_subtitle) { Example5Fragment() },
         ExampleItem(R.string.example_6_title, R.string.example_6_subtitle) { Example6Fragment() },
         ExampleItem(R.string.example_7_title, R.string.example_7_subtitle) { Example7Fragment() }

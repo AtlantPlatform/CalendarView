@@ -8,6 +8,8 @@
     <string name="example_3_subtitle">Event style implementation, day labels as header view, single selection, month scroll listener. Similar to what is in the Google Calendar app.</string>
     <string name="example_4_title">Example 4</string>
     <string name="example_4_subtitle">Continuous selection within one month and across multiple months, dates older than the current day are disabled. Similar to what is in the Airbnb app.</string>
+    <string name="example_4_1_title">Example 4(1)</string>
+    <string name="example_4_1_subtitle">Similar with 4 and also added padding for start and end of the week </string>
     <string name="example_5_title">Example 5</string>
     <string name="example_5_subtitle">Single selection, programmatic calendar scrolling, generates six rows for all months showing \"endOfGrid\" implementation of \"outDateStyle\" option. A flight schedule calender.</string>
     <string name="example_6_title">Example 6</string>
