@@ -11,11 +11,13 @@ internal class MonthViewHolder constructor(
     adapter: CalendarAdapter,
     rootLayout: ViewGroup,
     dayConfig: DayConfig,
+    startWeekConfig: WeekStartEndConfig?,
+    endWeekConfig: WeekStartEndConfig?,
     private var monthHeaderBinder: MonthHeaderFooterBinder<ViewContainer>?,
     private var monthFooterBinder: MonthHeaderFooterBinder<ViewContainer>?
 ) : RecyclerView.ViewHolder(rootLayout) {
 
-    private val weekHolders = (1..6).map { WeekHolder(dayConfig) }
+    private val weekHolders = (1..6).map { WeekHolder(dayConfig, startWeekConfig, endWeekConfig) }
 
     val headerView: View? = rootLayout.findViewById(adapter.headerViewId)
     val footerView: View? = rootLayout.findViewById(adapter.footerViewId)
@@ -54,5 +56,7 @@ internal class MonthViewHolder constructor(
 
     fun reloadDay(day: CalendarDay) {
         weekHolders.map { it.dayHolders }.flatten().firstOrNull { it.day == day }?.reloadView()
+        weekHolders.map { it.startWeekHolder }.firstOrNull { it?.day == day }?.reloadView()
+        weekHolders.map { it.endWeekHolder }.firstOrNull { it?.day == day }?.reloadView()
     }
 }

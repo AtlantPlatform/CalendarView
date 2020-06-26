@@ -23,6 +23,8 @@ internal typealias LP = ViewGroup.LayoutParams
 
 internal data class ViewConfig(
     @LayoutRes val dayViewRes: Int,
+    @LayoutRes val startWeekViewRes: Int,
+    @LayoutRes val endWeekViewRes: Int,
     @LayoutRes val monthHeaderRes: Int,
     @LayoutRes val monthFooterRes: Int,
     val monthViewClass: String?
@@ -133,6 +135,14 @@ internal class CalendarAdapter(
             DayConfig(
                 calView.dayWidth, calView.dayHeight, viewConfig.dayViewRes,
                 calView.dayBinder as DayBinder<ViewContainer>
+            ),
+            WeekStartEndConfig(
+                calView.startWeekWidth, viewConfig.startWeekViewRes,
+                calView.weekStartBinder as WeekStartEndBinder<ViewContainer>?
+            ),
+            WeekStartEndConfig(
+                calView.endWeekWidth, viewConfig.endWeekViewRes,
+                calView.weekEndBinder as WeekStartEndBinder<ViewContainer>?
             ),
             calView.monthHeaderBinder as MonthHeaderFooterBinder<ViewContainer>?,
             calView.monthFooterBinder as MonthHeaderFooterBinder<ViewContainer>?

@@ -5,6 +5,12 @@
         <!-- The xml resource that is inflated and used as the day cell view, must be provided. -->
         <attr name="cv_dayViewResource" format="reference" />
 
+        <!-- The xml resource that is inflated and used as a start for every week. -->
+        <attr name="cv_weekStartResource" format="reference" />
+
+        <!-- The xml resource that is inflated and used as a end for every week. -->
+        <attr name="cv_weekEndResource" format="reference" />
+
         <!-- The xml resource that is inflated and used as a header for every month. -->
         <attr name="cv_monthHeaderResource" format="reference" />
 

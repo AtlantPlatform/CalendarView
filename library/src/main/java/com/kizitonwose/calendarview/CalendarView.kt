@@ -27,6 +27,29 @@ open class CalendarView : RecyclerView {
         }
 
     /**
+     * The [WeekStartEndBinder] instance used for managing start week view
+     * creation and reuse. Changing the binder means that the view
+     * creation logic could have changed too. We refresh the Calender.
+     */
+    var weekStartBinder: WeekStartEndBinder<*>? = null
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+    /**
+     * The [WeekStartEndBinder] instance used for managing end week view
+     * creation and reuse. Changing the binder means that the view
+     * creation logic could have changed too. We refresh the Calender.
+     */
+    var weekEndBinder: WeekStartEndBinder<*>? = null
+        set(value) {
+            field = value
+            invalidateViewHolders()
+        }
+
+
+    /**
      * The [MonthHeaderFooterBinder] instance used for managing header views.
      * The header view is shown above each month on the Calendar.
      */
@@ -60,6 +83,30 @@ open class CalendarView : RecyclerView {
         set(value) {
             if (field != value) {
                 if (value == 0) throw IllegalArgumentException("'dayViewResource' attribute not provided.")
+                field = value
+                updateAdapterViewConfig()
+            }
+        }
+
+    /**
+     * The xml resource that is inflated and used as the start for every week.
+     * Set zero to disable.
+     */
+    var weekStartResource = 0
+        set(value) {
+            if (field != value) {
+                field = value
+                updateAdapterViewConfig()
+            }
+        }
+
+    /**
+     * The xml resource that is inflated and used as the end for every week.
+     * Set zero to disable.
+     */
+    var weekEndResource = 0
+        set(value) {
+            if (field != value) {
                 field = value
                 updateAdapterViewConfig()
             }
@@ -235,6 +282,8 @@ open class CalendarView : RecyclerView {
         setHasFixedSize(true)
         val a = context.obtainStyledAttributes(attributeSet, R.styleable.CalendarView, defStyleAttr, defStyleRes)
         dayViewResource = a.getResourceId(R.styleable.CalendarView_cv_dayViewResource, dayViewResource)
+        weekStartResource = a.getResourceId(R.styleable.CalendarView_cv_weekStartResource, weekStartResource)
+        weekEndResource = a.getResourceId(R.styleable.CalendarView_cv_weekEndResource, weekEndResource)
         monthHeaderResource = a.getResourceId(R.styleable.CalendarView_cv_monthHeaderResource, monthHeaderResource)
         monthFooterResource = a.getResourceId(R.styleable.CalendarView_cv_monthFooterResource, monthFooterResource)
         orientation = a.getInt(R.styleable.CalendarView_cv_orientation, orientation)
@@ -262,7 +311,7 @@ open class CalendarView : RecyclerView {
             }
 
             // +0.5 => round to the nearest pixel
-            val squareSize = (((widthSize - (monthPaddingStart + monthPaddingEnd)) / 7f) + 0.5).toInt()
+            val squareSize = (((widthSize - (monthPaddingStart + monthPaddingEnd + startWeekWidth + endWeekWidth)) / 7f) + 0.5).toInt()
             if (dayWidth != squareSize || dayHeight != squareSize) {
                 sizedInternally = true
                 dayWidth = squareSize
@@ -304,6 +353,30 @@ open class CalendarView : RecyclerView {
             field = value
             if (!sizedInternally) {
                 autoSize = value == DAY_SIZE_SQUARE
+                invalidateViewHolders()
+            }
+        }
+
+    /**
+     * The width, in pixels for start of the week
+     */
+    @Px
+    var startWeekWidth: Int = 0
+        set(value) {
+            field = value
+            if (!sizedInternally) {
+                invalidateViewHolders()
+            }
+        }
+
+    /**
+     * The width, in pixels for end of the week
+     */
+    @Px
+    var endWeekWidth: Int = 0
+        set(value) {
+            field = value
+            if (!sizedInternally) {
                 invalidateViewHolders()
             }
         }
@@ -436,7 +509,13 @@ open class CalendarView : RecyclerView {
     private fun updateAdapterViewConfig() {
         if (adapter != null) {
             calendarAdapter.viewConfig =
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass)
+                ViewConfig(dayViewResource,
+                    weekStartResource,
+                    weekEndResource,
+                    monthHeaderResource,
+                    monthFooterResource,
+                    monthViewClass
+                )
             invalidateViewHolders()
         }
     }
@@ -602,7 +681,14 @@ open class CalendarView : RecyclerView {
             layoutManager = CalendarLayoutManager(this, orientation)
             adapter = CalendarAdapter(
                 this,
-                ViewConfig(dayViewResource, monthHeaderResource, monthFooterResource, monthViewClass),
+                ViewConfig(
+                    dayViewResource,
+                    weekStartResource,
+                    weekEndResource,
+                    monthHeaderResource,
+                    monthFooterResource,
+                    monthViewClass
+                ),
                 MonthConfig(
                     outDateStyle, inDateStyle, maxRowCount, startMonth,
                     endMonth, firstDayOfWeek, hasBoundaries
